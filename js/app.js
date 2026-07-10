@@ -8,6 +8,26 @@
   var btnOpenNew = document.getElementById("btn-open-new");
 
   var activePdf = null;
+  var RELEASE_BASE = "https://github.com/123321zzq/h11-papers/releases/download/v1.0.0/";
+  var JSDELIVR_BASE = "https://cdn.jsdelivr.net/gh/123321zzq/h11-papers@main/";
+  var RELEASE_ONLY = { "01": true, "13": true };
+
+  function resolvePdfUrl(item) {
+    var url = item.url;
+    if (url.indexOf("http") === 0) {
+      return url;
+    }
+    var host = location.hostname;
+    if (host.indexOf("github.io") !== -1 || host.indexOf("gitee.io") !== -1 || host.indexOf("gitcode.io") !== -1) {
+      if (RELEASE_ONLY[item.id]) {
+        return RELEASE_BASE + item.id + ".pdf";
+      }
+      if (host.indexOf("github.io") !== -1) {
+        return JSDELIVR_BASE + url;
+      }
+    }
+    return url;
+  }
 
   function renderList() {
     referenceList.innerHTML = PDF_LIST.map(function (item) {
@@ -47,7 +67,7 @@
   function openPdf(paper) {
     activePdf = paper;
     readerTitle.textContent = paper.title;
-    pdfFrame.src = paper.url + "#toolbar=1&navpanes=0&view=FitH";
+    pdfFrame.src = resolvePdfUrl(paper) + "#toolbar=1&navpanes=0&view=FitH";
     homeView.classList.add("hidden");
     readerView.classList.remove("hidden");
     document.title = paper.title;
@@ -69,7 +89,7 @@
 
   function openInNewTab() {
     if (activePdf) {
-      window.open(activePdf.url, "_blank");
+      window.open(resolvePdfUrl(activePdf), "_blank");
     }
   }
 
