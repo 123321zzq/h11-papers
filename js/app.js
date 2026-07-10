@@ -18,13 +18,17 @@
       return url;
     }
     var host = location.hostname;
-    if (host.indexOf("github.io") !== -1 || host.indexOf("gitee.io") !== -1 || host.indexOf("gitcode.io") !== -1) {
+    var isRemote =
+      host.indexOf("github.io") !== -1 ||
+      host.indexOf("jsdelivr.net") !== -1 ||
+      host.indexOf("gitee.io") !== -1 ||
+      host.indexOf("gitcode.io") !== -1;
+
+    if (isRemote) {
       if (RELEASE_ONLY[item.id]) {
         return RELEASE_BASE + item.id + ".pdf";
       }
-      if (host.indexOf("github.io") !== -1) {
-        return JSDELIVR_BASE + url;
-      }
+      return JSDELIVR_BASE + url;
     }
     return url;
   }
@@ -43,7 +47,7 @@
                 '<span class="pdf-size">' + escapeHtml(item.size) + "</span>" +
               "</div>" +
             "</div>" +
-            '<span class="pdf-arrow">õ</span>' +
+            '<span class="pdf-arrow">ù</span>' +
           "</div>" +
         "</div>"
       );
